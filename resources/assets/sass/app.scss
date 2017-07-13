@@ -7,3 +7,17 @@
 
 // Bootstrap
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
+.panel-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.table-instance-actions .btn {
+  margin-top: -3.5px;
+}
+
+.btn-danger-outline {
+  @include button-variant($btn-danger-bg, $btn-danger-color, $btn-danger-border);
+}

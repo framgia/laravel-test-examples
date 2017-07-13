@@ -36,7 +36,9 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        &nbsp;
+                        &nbsp;@if(Auth::user())
+                              <li><a href="{{ route('cities.index') }}">Cities</a></li>
+                         @endif
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -84,6 +86,13 @@
                 </div>
             </div>
         </nav>
+
+        @if ($errors->has('system'))
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>Warning!</strong> {{ $errors->first('system') }}
+            </div>
+        @endif
 
         @yield('content')
     </div>

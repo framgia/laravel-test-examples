@@ -22,3 +22,5 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('settings/oauth/clients', 'OAuthController@showClientsList')->name('oauth.clients');
 Route::get('settings/oauth/authorized-clients', 'OAuthController@showAuthorizedClientsList')->name('oauth.authorized-clients');
 Route::get('settings/oauth/personal-access-tokens', 'OAuthController@showPersonalAccessTokensList')->name('oauth.personal-access-tokens');
+
+Route::resource('cities', 'CityController');
