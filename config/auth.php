@@ -18,7 +18,7 @@ return [
     | Authentication Guards
     |--------------------------------------------------------------------------
     |
-    | Supported: "session", "token"
+    | Supported: "session", "token", "passport"
     |
     */
 
@@ -30,6 +30,11 @@ return [
 
         'api' => [
             'driver' => 'token',
+            'provider' => 'users',
+        ],
+
+        'oauth' => [
+            'driver' => 'passport',
             'provider' => 'users',
         ],
     ],

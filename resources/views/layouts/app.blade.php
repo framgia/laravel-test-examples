@@ -53,6 +53,20 @@
 
                                 <ul class="dropdown-menu" role="menu">
                                     <li>
+                                        <a href="{{ route('oauth.clients') }}">Clients</a>
+                                    </li>
+
+                                    <li>
+                                        <a href="{{ route('oauth.authorized-clients') }}">Authorized Clients</a>
+                                    </li>
+
+                                    <li>
+                                        <a href="{{ route('oauth.personal-access-tokens') }}">Personal Access Tokens</a>
+                                    </li>
+
+                                    <li role="separator" class="divider"></li>
+
+                                    <li>
                                         <a href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
