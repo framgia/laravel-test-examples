@@ -24,3 +24,4 @@ Route::get('settings/oauth/authorized-clients', 'OAuthController@showAuthorizedC
 Route::get('settings/oauth/personal-access-tokens', 'OAuthController@showPersonalAccessTokensList')->name('oauth.personal-access-tokens');
 
 Route::resource('cities', 'CityController');
+Route::resource('streets', 'StreetController');

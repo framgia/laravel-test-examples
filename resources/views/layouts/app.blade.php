@@ -38,6 +38,7 @@
                     <ul class="nav navbar-nav">
                         &nbsp;@if(Auth::user())
                               <li><a href="{{ route('cities.index') }}">Cities</a></li>
+                              <li><a href="{{ route('streets.index') }}">Streets</a></li>
                          @endif
                     </ul>
 

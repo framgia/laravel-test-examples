@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Repo\StreetRepository;
+use App\Repo\StreetModelRepository;
+use App\Repo\StreetRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,6 +26,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->singleton(StreetRepository::class, function ($app) {
+            return new StreetRepository($app['db']->connection());
+        });
+
+        $this->app->singleton(StreetModelRepository::class, function ($app) {
+            return new StreetModelRepository();
+        });
+
+        $this->app->alias(StreetRepository::class, StreetRepositoryInterface::class);
+        $this->app->alias(StreetRepositoryInterface::class, 'streets');
     }
 }
