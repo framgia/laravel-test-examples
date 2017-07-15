@@ -5,10 +5,11 @@ build:
       - curl -o /usr/bin/framgia-ci https://raw.githubusercontent.com/framgia/ci-report-tool/master/dist/framgia-ci && chmod +x /usr/bin/framgia-ci
       - chmod -R 777 storage/
       - chmod -R 777 bootstrap/cache/
-      - cp .env.testing.example .env
+      - cp .env.testing.example .env && cp .env.testing.example .env.testing
       - composer install
       - yarn
       - npm run production
+      - php artisan migrate --database=mysql_test
       - framgia-ci run
 compose:
   database:

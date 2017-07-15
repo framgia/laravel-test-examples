@@ -21,7 +21,7 @@ test:
     ignore: true
     command: phpcs --standard=Framgia --report-checkstyle=.framgia-ci-reports/phpcs.xml app
   phpunit:
-    ignore: false
+    ignore: true
     command:
       - php -dzend_extension=xdebug.so vendor/bin/phpunit
         --coverage-clover=.framgia-ci-reports/coverage-clover.xml
