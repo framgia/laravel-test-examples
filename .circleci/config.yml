@@ -55,4 +55,8 @@ jobs:
       - run: npm run production
       - run: php artisan migrate --database=mysql_test
       # run tests!
-      - run: vendor/bin/phpunit
+      - run: mkdir -p /phpunit && php -dzend_extension=xdebug.so vendor/bin/phpunit --log-junit /phpunit/junit.xml
+      - store_test_results:
+          path: /phpunit
+      - store_artifacts:
+          path: /phpunit
