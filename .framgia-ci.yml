@@ -1,0 +1,28 @@
+project_type: php
+test:
+  phpcpd:
+    ignore: true
+    command: phpcpd --log-pmd=.framgia-ci-reports/phpcpd.xml app
+  phpmd:
+    ignore: true
+    command: phpmd app xml codesize --reportfile .framgia-ci-reports/phpmd.xml
+  pdepend:
+    ignore: true
+    command: pdepend --summary-xml=.framgia-ci-reports/pdepend.xml
+        --jdepend-chart=.framgia-ci-reports/pdepend.svg
+        --overview-pyramid=.framgia-ci-reports/pyramid.svg
+        app
+  phpmetrics:
+    ignore: true
+    command: phpmetrics --report-html=.framgia-ci-reports/metrics.html
+        --report-xml=.framgia-ci-reports/metrics.xml
+        app
+  phpcs:
+    ignore: false
+    command: phpcs --standard=Framgia --report-checkstyle=.framgia-ci-reports/phpcs.xml app
+  phpunit:
+    ignore: false
+    command:
+      - php -dzend_extension=xdebug.so vendor/bin/phpunit
+        --coverage-clover=.framgia-ci-reports/coverage-clover.xml
+        --coverage-html=.framgia-ci-reports/coverage
