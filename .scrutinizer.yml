@@ -1,0 +1,32 @@
+build:
+    environment:
+        php: '7.1'
+        mysql: '5.7'
+        node: '8.1'
+        hosts:
+            laravel.dev: '127.0.0.1'
+        variables:
+            APP_ENV: 'testing'
+            APP_URL: 'http://laravel.dev'
+            API_HOST: 'laravel.dev'
+            DB_HOST: 'localhost'
+            DB_DATABASE: 'scrutinizer'
+            DB_USERNAME: 'scrutinizer'
+            DB_PASSWORD: 'scrutinizer'
+            MAIL_DRIVER: 'log'
+    cache:
+        directories:
+            - node_modules
+            - vendor/
+            - ~/.composer/cache/
+    tests:
+        before:
+            - chmod -R 777 storage
+            - chmod -R 777 bootstrap/cache
+            - npm run production
+        override:
+            -
+                command: vendor/bin/phpunit --coverage-clover=laravel-test-examples-coverage
+                coverage:
+                    file: laravel-test-examples-coverage
+                    format: clover
