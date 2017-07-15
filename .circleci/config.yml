@@ -39,7 +39,7 @@ jobs:
           name: Store composer cache
           key: composer-{{ checksum "composer.json" }}
           paths:
-            - vendor/bundle
+            - vendor
       # Yarn
       - restore_cache:
           name: Restore yarn cache
@@ -49,13 +49,16 @@ jobs:
       - run: yarn
       - save_cache:
           paths:
-            - ./node_modules
+            - node_modules
           key: yarn-{{ checksum "composer.json" }}
 
       - run: npm run production
       - run: php artisan migrate --database=mysql_test
       # run tests!
-      - run: mkdir -p /phpunit && php -dzend_extension=xdebug.so vendor/bin/phpunit --log-junit /phpunit/junit.xml
+      - run:
+          command: |
+            mkdir -p /phpunit &&
+            php -dzend_extension=xdebug.so vendor/bin/phpunit --coverage-clover=phpunit/coverage-clover.xml --coverage-html=phpunit/coverage
       - store_test_results:
           path: /phpunit
       - store_artifacts:
