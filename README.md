@@ -1,6 +1,12 @@
 # Sample Laravel Project with Tests
 This is a part of [Laravel Test Guideline](https://github.com/framgia/laravel-test-guideline) Project, made by Framgia Vietnam.
 
+## Build Status
+- Scrutinizer
+- Framgia CI [![Build Status](http://ci.framgia.vn/api/badges/framgia/laravel-test-examples/status.svg)](http://ci.framgia.vn/framgia/laravel-test-examples)
+- Travis CI
+- Circle CI
+
 ## Installation
 
 ### Docker
