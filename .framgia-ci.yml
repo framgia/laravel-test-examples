@@ -18,7 +18,7 @@ test:
         --report-xml=.framgia-ci-reports/metrics.xml
         app
   phpcs:
-    ignore: false
+    ignore: true
     command: phpcs --standard=Framgia --report-checkstyle=.framgia-ci-reports/phpcs.xml app
   phpunit:
     ignore: false
