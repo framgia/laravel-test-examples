@@ -1,0 +1,58 @@
+# PHP CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-php/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      - image: framgia/laravel-workspace
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      - image: circleci/mysql:5.7.18
+        environment:
+          MYSQL_DATABASE: homestead_test
+          MYSQL_USER: homestead_test
+          MYSQL_PASSWORD: secret
+          MYSQL_ROOT_PASSWORD: root
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - run: chmod -R 777 storage
+      - run: cp .env.testing.example .env
+
+      # Download and cache dependencies
+      # Composer
+      - restore_cache:
+          name: Restore composer cache
+          keys:
+          - composer-{{ checksum "composer.json" }}
+          - composer-
+      - run: composer install -n --prefer-dist
+      - save_cache:
+          name: Store composer cache
+          key: composer-{{ checksum "composer.json" }}
+          paths:
+            - vendor/bundle
+      # Yarn
+      - restore_cache:
+          name: Restore yarn cache
+          keys:
+            - yarn-{{ checksum "yarn.lock" }}
+            - yarn-
+      - run: yarn
+      - save_cache:
+          paths:
+            - ./node_modules
+          key: yarn-{{ checksum "composer.json" }}
+
+      - run: npm run production
+      - run: php artisan migrate --database=mysql_test
+      # run tests!
+      - run: vendor/bin/phpunit
