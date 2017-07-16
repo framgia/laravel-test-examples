@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+/**
+ * @codeCoverageIgnore
+ */
 class HomeController extends Controller
 {
     /**

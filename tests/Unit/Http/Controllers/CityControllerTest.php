@@ -2,30 +2,63 @@
 
 namespace Tests\Unit\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
+use Mockery as m;
 use App\City;
+use Illuminate\Database\Connection;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Tests\TestCase;
 use Illuminate\Http\Request;
 use App\Http\Controllers\CityController;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\WithClearQueryLog;
 
 class CityControllerTest extends TestCase
 {
-    use DatabaseTransactions, WithClearQueryLog;
+    /**
+     * @var \Mockery\Mock|\Illuminate\Database\Connection
+     */
+    protected $db;
 
     public function setUp()
     {
-        $this->afterApplicationCreated(function () { $this->setUpQueryLog(); });
-        $this->beforeApplicationDestroyed(function () { $this->tearDownQueryLog(); });
+        $this->afterApplicationCreated(function () {
+            $this->db = m::mock(
+                Connection::class.'[select,update,insert,delete]',
+                [m::mock(\PDO::class)]
+            );
+
+            $manager = $this->app['db'];
+            $manager->setDefaultConnection('mock');
+
+            $r = new \ReflectionClass($manager);
+            $p = $r->getProperty('connections');
+            $p->setAccessible(true);
+            $list = $p->getValue($manager);
+            $list['mock'] = $this->db;
+            $p->setValue($manager, $list);
+        });
+
         parent::setUp();
     }
 
-    /**
-     * @test
-     */
-    public function it_stores_new_city()
+    public function test_index_returns_view()
+    {
+        $controller = new CityController();
+
+        $this->db->shouldReceive('select')->once()->withArgs([
+            'select count(*) as aggregate from "cities"',
+            [],
+            m::any(),
+        ])->andReturn((object) ['aggregate' => 10]);
+
+        $view = $controller->index();
+
+        $this->assertEquals('cities.list', $view->getName());
+        $this->assertArrayHasKey('cities', $view->getData());
+    }
+
+
+    public function test_it_stores_new_city()
     {
         $controller = new CityController();
 
@@ -37,18 +70,29 @@ class CityControllerTest extends TestCase
         $request->headers->set('content-type', 'application/json');
         $request->setJson(new ParameterBag($data));
 
-        $controller->store($request);
-        $log = $this->db->getQueryLog();
+        // Mock Validation Presence Query
+        $this->db->shouldReceive('select')->once();
 
-        $this->assertDatabaseHas('cities', $data);
-        // First query is validation.
-        $this->assertEquals(2, count($log));
+        $this->db->getPdo()->shouldReceive('lastInsertId')->andReturn(333);
+        $this->db->shouldReceive('insert')->once()
+            ->withArgs([
+                'insert into "cities" ("name", "updated_at", "created_at") values (?, ?, ?)',
+                m::on(function ($arg) {
+                    return is_array($arg) &&
+                        $arg[0] == 'New City';
+                })
+            ])
+            ->andReturn(true);
+
+        /** @var RedirectResponse $response */
+        $response = $controller->store($request);
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertEquals(route('cities.index'), $response->headers->get('Location'));
+        $this->assertEquals(333, $response->getSession()->get('created'));
     }
 
-    /**
-     * @test
-     */
-    public function it_throws_error_on_duplicate_name()
+    public function test_it_throws_error_on_duplicate_name()
     {
         $controller = new CityController();
 
@@ -56,7 +100,11 @@ class CityControllerTest extends TestCase
             'name' => 'New City',
         ];
 
-        City::create($data);
+        $this->db->shouldReceive('select')->once()->withArgs([
+            'select count(*) as aggregate from "cities" where "name" = ?',
+            ['New City'],
+            m::any(),
+        ])->andReturn([(object) ['aggregate' => 1]]);
 
         $request = new Request();
         $request->headers->set('content-type', 'application/json');
