@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\City;
+use App\Events\CityShown;
 use Illuminate\Database\QueryException;
+use Illuminate\Events\Dispatcher;
 use Illuminate\Http\Request;
 
 class CityController extends Controller
@@ -69,11 +71,14 @@ class CityController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param  Dispatcher  $events
      * @param  \App\City  $city
      * @return \Illuminate\Http\Response
      */
-    public function show(City $city)
+    public function show(Dispatcher $events, City $city)
     {
+        $events->dispatch(new CityShown($city));
+
         return view('cities.item', [
             'city' => $city,
         ]);

@@ -2,6 +2,8 @@
 
 namespace Tests\Unit\Http\Controllers;
 
+use App\Events\CityShown;
+use Illuminate\Events\Dispatcher;
 use Illuminate\Http\RedirectResponse;
 use Mockery as m;
 use App\City;
@@ -112,5 +114,19 @@ class CityControllerTest extends TestCase
 
         $this->expectException(ValidationException::class);
         $controller->store($request);
+    }
+
+    public function test_it_fires_event_and_shows_city()
+    {
+        $controller = new CityController();
+        $city = new City(['id' => 111]);
+
+        $events = m::mock(Dispatcher::class);
+        $events->shouldReceive('dispatch')->with(m::on(function ($arg) use ($city) {
+            return $arg instanceof CityShown && $arg->city === $city;
+        }));
+        $view = $controller->show($events, $city);
+        $this->assertEquals('cities.item', $view->getName());
+        $this->assertArrayHasKey('city', $view->getData());
     }
 }
