@@ -107,7 +107,7 @@ class CityController extends Controller
     public function update(Request $request, City $city)
     {
         $data = $request->validate([
-            'name' => 'required|unique:cities,name',
+            'name' => 'required|unique:cities,name,'.$city->id,
         ]);
 
         try {
