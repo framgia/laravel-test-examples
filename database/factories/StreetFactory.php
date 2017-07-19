@@ -13,7 +13,7 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(App\StreetFactory::class, function (Faker $faker) {
+$factory->define(App\Street::class, function (Faker $faker) {
     return [
         //
     ];
