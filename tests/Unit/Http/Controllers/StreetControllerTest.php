@@ -31,15 +31,31 @@ class StreetControllerTest extends TestCase
     {
         $controller = new StreetController($this->streetRepoMock);
 
-        $data = ['page' => 1];
         $request = new Request();
         $request->headers->set('content-type', 'application/json');
-        $request->setJson(new ParameterBag($data));
+        $request->query->set('page', 3);
 
-        $streets = factory(Street::class, 10)->create();
+        $streets = factory(Street::class, 10)->make();
         $this->streetRepoMock->shouldReceive('paginateList')
             ->once()
-            ->with($data['page'])
+            ->with(3)
+            ->andReturn($streets);
+
+        $view = $controller->index($request);
+
+        $this->assertEquals('streets.list', $view->getName());
+        $this->assertArraySubset(['streets' => $streets], $view->getData());
+    }
+
+    public function test_index_default_parameters()
+    {
+        $controller = new StreetController($this->streetRepoMock);
+
+        $request = new Request();
+        $streets = factory(Street::class, 10)->make();
+        $this->streetRepoMock->shouldReceive('paginateList')
+            ->once()
+            ->with(1)
             ->andReturn($streets);
 
         $view = $controller->index($request);
