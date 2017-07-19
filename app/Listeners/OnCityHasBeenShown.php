@@ -9,6 +9,11 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 class OnCityHasBeenShown
 {
     /**
+     * @var \Symfony\Component\HttpFoundation\Session\SessionInterface
+     */
+    protected $session;
+
+    /**
      * Create the event listener.
      *
      * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
