@@ -30,10 +30,6 @@ class AppServiceProvider extends ServiceProvider
             return new StreetRepository($app['db']->connection());
         });
 
-        $this->app->singleton(StreetModelRepository::class, function ($app) {
-            return new StreetModelRepository();
-        });
-
         $this->app->alias(StreetRepository::class, StreetRepositoryInterface::class);
         $this->app->alias(StreetRepositoryInterface::class, 'streets');
     }
