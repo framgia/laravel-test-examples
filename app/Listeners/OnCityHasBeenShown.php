@@ -2,20 +2,20 @@
 
 namespace App\Listeners;
 
+use Carbon\Carbon;
 use App\Events\CityShown;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class OnCityHasBeenShown
 {
     /**
      * Create the event listener.
      *
-     * @return void
+     * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
      */
-    public function __construct()
+    public function __construct(SessionInterface $session)
     {
-        //
+        $this->session = $session;
     }
 
     /**
@@ -26,6 +26,6 @@ class OnCityHasBeenShown
      */
     public function handle(CityShown $event)
     {
-        //
+        $this->session->set('city.shown.'.$event->city->getKey(), Carbon::now());
     }
 }
