@@ -285,9 +285,7 @@ class CityControllerTest extends TestCase
             m::on(function($arg) {
                 return is_array($arg) && $arg['name'] == 'New City';
             }
-        )])->andReturnUsing(function() {
-            throw new QueryException('', [], new \Exception);
-        });
+        )])->andThrow(new QueryException('', [], new \Exception));
 
         $response = $controller->update($request, $city);
 
