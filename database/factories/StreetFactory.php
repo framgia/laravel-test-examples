@@ -13,6 +13,7 @@ use Faker\Generator as Faker;
 |
 */
 
+
 $factory->define(App\Street::class, function (Faker $faker) use ($factory) {
     return [
         'city_id' => $factory->create(App\City::class)->id,
