@@ -99,8 +99,7 @@ class StreetRepository implements StreetRepositoryInterface
     {
         $query = $this->query();
 
-        foreach ($conditions as $field => $value)
-        {
+        foreach ($conditions as $field => $value) {
             $query->where($field, '=', $value);
         }
 
@@ -157,8 +156,7 @@ class StreetRepository implements StreetRepositoryInterface
     {
         $query = $this->query();
 
-        foreach ($conditions as $field => $value)
-        {
+        foreach ($conditions as $field => $value) {
             $query->where($field, '=', $value);
         }
 

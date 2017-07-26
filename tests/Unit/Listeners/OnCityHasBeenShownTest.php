@@ -8,7 +8,7 @@ use Mockery as m;
 use App\Events\CityShown;
 use Tests\SimpleTestCase;
 use App\Listeners\OnCityHasBeenShown;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Illuminate\Contracts\Session\Session;
 
 class OnCityHasBeenShownTest extends SimpleTestCase
 {
@@ -17,10 +17,10 @@ class OnCityHasBeenShownTest extends SimpleTestCase
         City::unguard();
         $e = new CityShown(new City(['id' => 555]));
 
-        $session = m::mock(SessionInterface::class);
+        $session = m::mock(Session::class);
         $l = new OnCityHasBeenShown($session);
 
-        $session->shouldReceive('set')->once()->with('city.shown.555', m::type(DateTime::class));
+        $session->shouldReceive('put')->once()->with('city.shown.555', m::type(DateTime::class));
         $this->assertNull($l->handle($e));
     }
 }
