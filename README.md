@@ -26,6 +26,10 @@ yarn
 php artisan migrate
 php artisan migrate --database=mysql_test
 ```
+- Generate application encryption key
+```
+php artisan key:generate
+```
 - Check the service online at http://0.0.0.0:8000/
 
 ## Integrate with CI services

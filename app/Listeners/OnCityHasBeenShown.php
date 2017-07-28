@@ -4,21 +4,21 @@ namespace App\Listeners;
 
 use Carbon\Carbon;
 use App\Events\CityShown;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Illuminate\Contracts\Session\Session;
 
 class OnCityHasBeenShown
 {
     /**
-     * @var \Symfony\Component\HttpFoundation\Session\SessionInterface
+     * @var \Illuminate\Contracts\Session\Session
      */
     protected $session;
 
     /**
      * Create the event listener.
      *
-     * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
+     * @param \Illuminate\Contracts\Session\Session $session
      */
-    public function __construct(SessionInterface $session)
+    public function __construct(Session $session)
     {
         $this->session = $session;
     }
@@ -31,6 +31,6 @@ class OnCityHasBeenShown
      */
     public function handle(CityShown $event)
     {
-        $this->session->set('city.shown.'.$event->city->getKey(), Carbon::now());
+        $this->session->put('city.shown.'.$event->city->getKey(), Carbon::now());
     }
 }
