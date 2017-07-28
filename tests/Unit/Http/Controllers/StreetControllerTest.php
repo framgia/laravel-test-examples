@@ -9,9 +9,11 @@ use App\Repo\StreetRepositoryInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use App\Street;
 use App\Http\Controllers\StreetController;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class StreetControllerTest extends TestCase
 {
+    use DatabaseTransactions;
 
     /**
      * @var \Mockery\Mock|Repo\StreetRepositoryInterface
