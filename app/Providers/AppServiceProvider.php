@@ -6,6 +6,7 @@ use App\Repo\StreetRepository;
 use App\Repo\StreetModelRepository;
 use App\Repo\StreetRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Dusk\DuskServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -32,5 +33,9 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->alias(StreetRepository::class, StreetRepositoryInterface::class);
         $this->app->alias(StreetRepositoryInterface::class, 'streets');
+
+        if (in_array(env('APP_ENV'), ['local', 'development'])) {
+            $this->app->register(DuskServiceProvider::class);
+        }
     }
 }
