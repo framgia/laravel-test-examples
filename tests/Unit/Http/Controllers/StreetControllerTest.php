@@ -23,7 +23,7 @@ class StreetControllerTest extends TestCase
     public function setUp()
     {
         $this->afterApplicationCreated(function () {
-            $this->streetRepoMock = m::mock(StreetRepositoryInterface::class);
+            $this->streetRepoMock = m::mock($this->app->make(StreetRepositoryInterface::class));
         });
 
         parent::setUp();
