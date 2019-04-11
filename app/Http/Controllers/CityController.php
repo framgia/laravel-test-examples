@@ -26,6 +26,7 @@ class CityController extends Controller
     public function index()
     {
         $cities = City::query()
+            ->latest('created_at')
             ->paginate();
 
         return view('cities.list', [
